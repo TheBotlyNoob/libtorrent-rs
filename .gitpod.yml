@@ -1,0 +1,6 @@
+tasks:
+  - init: |
+      git submodule update --init --recursive
+      sudo apt update
+      sudo apt install cmake libboost-all-dev -y
+      cargo build
