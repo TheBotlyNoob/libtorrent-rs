@@ -1,0 +1,3 @@
+[submodule "include/vendor"]
+	path = include/libtorrent
+url = https://github.com/arvidn/libtorrent
