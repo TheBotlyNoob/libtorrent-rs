@@ -6,9 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-openssl-sys = "0.9"
-link-cplusplus = "1.0"
+openssl-sys = { version = "0.9.80", features = ["vendored"] }
+autocxx = "0.24.0"
+cxx = { version = "1.0.91", features = ["c++14"] }
 
 [build-dependencies]
-bindgen = "0.63.0"
-cmake = "0.1"
+autocxx-build = "0.24.0"
+cmake = "0.1.49"
+miette = { version = "5.5.0", features = ["fancy"] }
