@@ -1,14 +1,10 @@
-use std::{env, ffi::OsString, path::Path};
-
 use cmake::Config;
 
-fn main() -> miette::Result<()> {
+fn main() {
     println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=src/lib.rs");
 
     let mut conf = Config::new("vendor/libtorrent");
-
-    #[cfg(not(debug_assertions))]
-    conf.define("CMAKE_BUILD_TYPE", "Release");
 
     conf.define("CMAKE_CXX_STANDARD", "14")
         .define("BUILD_SHARED_LIBS", "OFF")
@@ -24,12 +20,12 @@ fn main() -> miette::Result<()> {
     );
     println!("cargo:rustc-link-lib=static=torrent-rasterbar");
 
-    let boost_path = env::var_os("BOOST_ROOT").unwrap_or_else(OsString::new);
-    let boost_path = Path::new(&boost_path);
+    let boost_path = std::env::var_os("BOOST_ROOT").unwrap_or_else(std::ffi::OsString::new);
+    let boost_path = std::path::Path::new(&boost_path);
 
-    let mut b =
-        autocxx_build::Builder::new("src/lib.rs", [&dst.join("include"), boost_path]).build()?;
-    // This assumes all your C++ bindings are in lib.rs
-    b.flag_if_supported("-std=c++14").compile("autocxx"); // arbitrary library name, pick anything
-    Ok(())
+    cxx_build::bridge("src/lib.rs")
+        .include("vendor/libtorrent/include")
+        .include(boost_path)
+        .flag_if_supported("-std=c++17")
+        .compile("libtorrent-sys");
 }

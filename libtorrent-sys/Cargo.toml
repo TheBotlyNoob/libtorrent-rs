@@ -7,10 +7,8 @@ edition = "2021"
 
 [dependencies]
 openssl-sys = { version = "0.9.80", features = ["vendored"] }
-autocxx = "0.24.0"
-cxx = { version = "1.0.91", features = ["c++14"] }
+cxx = { version = "1.0.91", features = ["c++17"] }
 
 [build-dependencies]
-autocxx-build = "0.24.0"
+cxx-build = "1.0.91"
 cmake = "0.1.49"
-miette = { version = "5.5.0", features = ["fancy"] }

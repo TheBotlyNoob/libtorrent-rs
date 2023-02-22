@@ -1,7 +1,15 @@
-use autocxx::prelude::*;
+#[cxx::bridge(namespace = "libtorrent")]
+mod ffi {
+    unsafe extern "C++" {
+        include!("libtorrent/version.hpp");
 
-include_cpp! {
-    #include "libtorrent/session.hpp"
-    safety!(unsafe)
-    generate!("libtorrent::session")
+        fn version() -> *const char;
+    }
+}
+
+#[test]
+fn test_parse_magnet_uri() {
+    unsafe {
+        ffi::parse_magnet_uri("magnet:?xt=urn:btih:2d2d2d2d2d424547494e20");
+    }
 }
