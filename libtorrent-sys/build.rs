@@ -1,4 +1,4 @@
-use std::{env, path::Path};
+use std::{env, ffi::OsString, path::Path};
 
 use cmake::Config;
 
@@ -24,7 +24,7 @@ fn main() -> miette::Result<()> {
     );
     println!("cargo:rustc-link-lib=static=torrent-rasterbar");
 
-    let boost_path = env::var("BOOST_ROOT").expect("BOOST_ROOT not set");
+    let boost_path = env::var_os("BOOST_ROOT").unwrap_or_else(OsString::new);
     let boost_path = Path::new(&boost_path);
 
     let mut b =
