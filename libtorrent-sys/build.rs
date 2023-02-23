@@ -4,10 +4,6 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=src/lib.rs");
 
-    let boost_path = std::env::var_os("BOOST_ROOT")
-        .unwrap_or_else(std::ffi::OsString::new);
-    let boost_path = std::path::Path::new(&boost_path);
-
     let mut conf = Config::new("vendor/libtorrent");
 
     conf.define("CMAKE_CXX_STANDARD", "17")
@@ -23,14 +19,13 @@ fn main() {
     );
     println!("cargo:rustc-link-lib=static=torrent-rasterbar");
 
-    println!("cargo:rustc-link-search=native={}", boost_path.display());
-
     if cfg!(target_os = "windows") {
         // link to winapi
         println!("cargo:rustc-link-lib=dylib=Iphlpapi");
-        #[cfg(debug_assertions)]
-        println!("cargo:rustc-link-lib=dylib=DbgHelp");
     }
+
+    let boost_path = std::env::var_os("BOOST_ROOT").unwrap_or_else(std::ffi::OsString::new);
+    let boost_path = std::path::Path::new(&boost_path);
 
     cxx_build::bridge("src/lib.rs")
         .include("vendor/libtorrent/include")

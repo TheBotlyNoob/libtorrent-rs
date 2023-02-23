@@ -11,5 +11,7 @@ pub mod ffi {
 
 #[test]
 fn test_version() {
-    panic!("version: {}", unsafe { std::ffi::CStr::from_ptr(ffi::version()).to_str().unwrap() });
+    panic!("version: {}", unsafe {
+        std::ffi::CStr::from_ptr(ffi::version()).to_str().unwrap()
+    });
 }
