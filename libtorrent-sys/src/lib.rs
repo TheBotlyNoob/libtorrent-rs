@@ -10,8 +10,9 @@ pub mod ffi {
 }
 
 #[test]
-fn test_version() {
-    panic!("version: {}", unsafe {
-        std::ffi::CStr::from_ptr(ffi::version()).to_str().unwrap()
-    });
+fn sanity_check() {
+    assert_eq!(
+        unsafe { std::ffi::CStr::from_ptr(ffi::version()).to_str() },
+        Ok("2.0.8.0")
+    );
 }
